@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/search">
+
+    <fragment
+        android:id="@+id/search"
+        android:name="com.example.photo.search"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_results"
+            app:destination="@id/results"
+            app:popUpTo="@id/search"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_search_to_savedViewer"
+            app:destination="@id/grid"
+            app:popUpTo="@id/search" />
+    </fragment>
+    <fragment
+        android:id="@+id/results"
+        android:name="com.example.photo.results"
+        android:label="fragment_results"
+        tools:layout="@layout/fragment_results" >
+        <action
+            android:id="@+id/action_results_to_viewer"
+            app:destination="@id/viewer" />
+        <argument
+            android:name="q"
+            app:argType="string"
+            android:defaultValue="cloud"/>
+        <action
+            android:id="@+id/action_results_to_viewer2"
+            app:destination="@id/viewer"
+            app:popUpTo="@id/results" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewer"
+        android:name="com.example.photo.viewer"
+        android:label="fragment_viewer"
+        tools:layout="@layout/fragment_viewer" >
+        <argument
+            android:name="url"
+            app:argType="com.example.photo.ImagePass" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedViewer"
+        android:name="com.example.photo.SavedViewer"
+        android:label="fragment_saved_viewer"
+        tools:layout="@layout/fragment_saved_viewer" >
+        <argument
+            android:name="position"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/grid"
+        android:name="com.example.photo.Grid"
+        android:label="fragment_grid"
+        tools:layout="@layout/fragment_grid" >
+        <action
+            android:id="@+id/action_grid_to_savedViewer"
+            app:destination="@id/savedViewer"
+            app:popUpTo="@id/grid" />
+    </fragment>
+</navigation>
