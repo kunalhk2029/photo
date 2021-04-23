@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -34,6 +36,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class GridImageAdapter(val context: Context,val listener: delt):RecyclerView.Adapter<GridSavedImageViewHolder>() {
+   lateinit var bitmap: Bitmap
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridSavedImageViewHolder {
   val view = LayoutInflater.from(parent.context).inflate(R.layout.grid_item,parent,false)
         val holder = GridSavedImageViewHolder(view)
@@ -45,8 +48,8 @@ class GridImageAdapter(val context: Context,val listener: delt):RecyclerView.Ada
 
     val diffUtilCallback = object : DiffUtil.ItemCallback<ImageData>() {
 
-        override fun areItemsTheSame(oldItem: ImageData, newItem: ImageData): Boolean {
-               return oldItem.id==newItem.id
+        override fun areItemsTheSame(oldItem: ImageData, newItem:ImageData): Boolean {
+               return oldItem==newItem
            }
            @SuppressLint("DiffUtilEquals")
            override fun areContentsTheSame(oldItem: ImageData, newItem: ImageData): Boolean {
@@ -63,9 +66,10 @@ class GridImageAdapter(val context: Context,val listener: delt):RecyclerView.Ada
 //               val bitmap : Bitmap= BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)\
 
 
-                val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),pos.bitmapimage).absolutePath
-                val filee = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),pos.bitmapimage)
+                val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),pos.bitmapimage)
 
+
+                val uri = FileProvider.getUriForFile(context, "com.example.photo.fileprovider", file)
 
 //                image.setImageResource(R.drawable.background)
 
@@ -76,17 +80,19 @@ class GridImageAdapter(val context: Context,val listener: delt):RecyclerView.Ada
 //                image.setImageResource(R.drawable.tm)
 //                  image.load(R.drawable.full)
 //                image.setImageResource(R.drawable.full)
-            GlobalScope.launch {
-                val fgh = BitmapFactory.decodeFile(file)
-                val sdh = decodeSampledBitmapFromFile(filee,540,960)
-                   withContext(Dispatchers.Main)
-                   {
-                       Glide.with(context).load(sdh).into(image)
+//            GlobalScope.launch {
+//                val fgh = BitmapFactory.decodeFile(file)
+//                val sdh = decodeSampledBitmapFromFile(filee,100,100)
+//                bitmap = sdh
+//                withContext(Dispatchers.Main)
+//                   {
+//                   }
 
-                   }
+//            }
+                Glide.with(context).load(uri).into(image)
 
             }
-            }
+
     }
     fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         // Raw height and width of image

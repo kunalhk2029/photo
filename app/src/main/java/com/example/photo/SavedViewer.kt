@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.core.view.doOnLayout
 import androidx.core.view.get
@@ -36,6 +37,7 @@ class SavedViewer : Fragment(), delet {
     lateinit var repository: Repository
     var posinviewpager=0
     val args : SavedViewerArgs? by navArgs()
+    lateinit var list : MutableList<Uri>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +119,8 @@ class SavedViewer : Fragment(), delet {
             else {
                 println("Savedddddddddddddddddddddddddddddddddddddddddd     Not Empty      ${it}")
             }
+
+
             adapter.diffutil.submitList(it)
         })
 //        repository.data.value?.apply{
@@ -128,7 +132,7 @@ class SavedViewer : Fragment(), delet {
 
             withContext(Dispatchers.Main)
             {
-                delay(200)
+                delay(100)
                 rv.setCurrentItem(args!!.position,false)
 
             }

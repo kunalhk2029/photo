@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -53,8 +54,12 @@ class SavedImageAdapter(val context: Context,val listener: delet):RecyclerView.A
 //                datee.text = pos.date
 //                val byteArray = pos.bitmapimage
 //               val bitmap : Bitmap= BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)\
+//                val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),pos.bitmapimage)
+
                 val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),pos.bitmapimage)
 
+
+                val uri = FileProvider.getUriForFile(context, "com.example.photo.fileprovider", file)
 
 //                image.setImageBitmap(BitmapFactory.decodeFile(file.absolutePath))
 //                val options = BitmapFactory.Options().apply {
@@ -69,11 +74,12 @@ class SavedImageAdapter(val context: Context,val listener: delet):RecyclerView.A
 //                image.setImageBitmap(decodeSampledBitmapFromFile(file,135,240))
 //                val drawableintfrombtmp = BitmapDrawableResource
 //                image.setImageDrawable(drawablefrombitmap)
-                Glide.with(context).load(BitmapFactory.decodeFile(file.absolutePath)).into(image)
+//                Glide.with(context).load(decodeSampledBitmapFromFile(file,1080,1920)).into(image)
 //                Glide.with(context).load("vfd").
+                Glide.with(context).load(uri).into(image)
+
             }
 //        listener.delete(position)
-        println("Adapter"+position)
     }
     fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         // Raw height and width of image
@@ -118,10 +124,7 @@ class SavedImageAdapter(val context: Context,val listener: delet):RecyclerView.A
     override fun getItemCount(): Int {
      return diffutil.currentList.size
     }
-    fun list() : List<ImageData>
-    {
-        return  diffutil.currentList
-    }
+
 }
 
 class SavedImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
